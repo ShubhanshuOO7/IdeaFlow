@@ -1,6 +1,6 @@
-import { PenTool, Users, Zap, Share2, ArrowRight } from "lucide-react"
-import { Button } from "@repo/ui/button"
-import Link from "next/link"
+import { PenTool, Users, Zap, Share2, ArrowRight } from "lucide-react";
+import { Button } from "@repo/ui/button";
+import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
@@ -12,7 +12,9 @@ export default function Home() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <PenTool className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-sm font-semibold tracking-tight">DrawBoard</span>
+              <span className="text-sm font-semibold tracking-tight">
+                IdeaFlow
+              </span>
             </div>
             <div className="hidden items-center gap-8 md:flex">
               <a
@@ -27,17 +29,20 @@ export default function Home() {
               >
                 Showcase
               </a>
-              <a href="#pricing" className="text-xs font-medium text-muted-foreground hover:text-foreground transition">
+              <a
+                href="#pricing"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground transition"
+              >
                 Pricing
               </a>
             </div>
             <div className="flex items-center gap-3">
-             <Link href="/signin">
-             <Button size="md">Sign In</Button>
-             </Link>
-             <Link href="/signup">
-             <Button size="md">Sign Up</Button>
-             </Link>
+              <Link href="/signin">
+                <Button size="md">Sign In</Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="md">Sign Up</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -56,22 +61,23 @@ export default function Home() {
                   </p>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight text-balance">
-                  Think. <span className="text-primary">Sketch.</span> <br className="hidden sm:block" />
+                  Think. <span className="text-primary">Sketch.</span>{" "}
+                  <br className="hidden sm:block" />
                   <span className="text-primary">Collaborate.</span>
                 </h1>
                 <p className="text-base sm:text-lg text-muted-foreground max-w-2xl leading-7 font-medium">
-                  The infinite canvas for your ideas. DrawBoard brings your team together to sketch, design, and
-                  brainstorm in real-time.
+                  The infinite canvas for your ideas. DrawBoard brings your team
+                  together to sketch, design, and brainstorm in real-time.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="rounded-full gap-2 h-12 px-8 font-semibold text-sm">
-                  Start Drawing Free
+                <Button size="lg" className=" flex rounded-full gap-2 h-12 px-8 font-semibold text-sm justify-center items-center">
+                  <div>Start Drawing Free</div>
                   <ArrowRight className="h-5 w-5" />
                 </Button>
                 <Button
                   size="lg"
-                  className="rounded-full h-12 px-8 font-semibold text-sm bg-transparent"
+                  className="rounded-full h-12 px-8 font-semibold text-sm"
                 >
                   Watch Demo
                 </Button>
@@ -144,9 +150,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <PenTool className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Infinite Canvas</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Infinite Canvas
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Draw freely without boundaries. Your canvas expands as you create, perfect for sketching big ideas.
+                Draw freely without boundaries. Your canvas expands as you
+                create, perfect for sketching big ideas.
               </p>
             </div>
 
@@ -155,9 +164,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <Users className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Real-Time Collaboration</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Real-Time Collaboration
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Invite teammates and sketch together instantly. See changes live with zero latency.
+                Invite teammates and sketch together instantly. See changes live
+                with zero latency.
               </p>
             </div>
 
@@ -166,9 +178,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <Zap className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Lightning Fast</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Lightning Fast
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Optimized for speed. Experience smooth, responsive drawing with zero lag.
+                Optimized for speed. Experience smooth, responsive drawing with
+                zero lag.
               </p>
             </div>
 
@@ -177,9 +192,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <Share2 className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Easy Sharing</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Easy Sharing
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Share boards with a link or export as PNG, SVG, or PDF instantly.
+                Share boards with a link or export as PNG, SVG, or PDF
+                instantly.
               </p>
             </div>
 
@@ -188,9 +206,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <PenTool className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Rich Drawing Tools</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Rich Drawing Tools
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Extensive brush styles, shapes, and customization options for your unique style.
+                Extensive brush styles, shapes, and customization options for
+                your unique style.
               </p>
             </div>
 
@@ -199,9 +220,12 @@ export default function Home() {
               <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
                 <Zap className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-bold text-lg mb-3 text-foreground">Version History</h3>
+              <h3 className="font-bold text-lg mb-3 text-foreground">
+                Version History
+              </h3>
               <p className="text-muted-foreground leading-6 text-sm font-medium">
-                Never lose your work. Access previous versions and restore anytime.
+                Never lose your work. Access previous versions and restore
+                anytime.
               </p>
             </div>
           </div>
@@ -209,7 +233,10 @@ export default function Home() {
       </section>
 
       {/* Showcase Section */}
-      <section id="showcase" className="px-4 py-20 md:py-32 bg-gradient-to-b from-muted/30 to-background">
+      <section
+        id="showcase"
+        className="px-4 py-20 md:py-32 bg-gradient-to-b from-muted/30 to-background"
+      >
         <div className="mx-auto max-w-7xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -217,8 +244,8 @@ export default function Home() {
                 Collaboration Made Simple
               </h2>
               <p className="text-base text-muted-foreground leading-7 font-medium">
-                Bring your entire team into the creative process. Chat, comment, and iterate together on the same
-                canvas.
+                Bring your entire team into the creative process. Chat, comment,
+                and iterate together on the same canvas.
               </p>
               <ul className="space-y-4">
                 <li className="flex gap-3 items-start">
@@ -246,7 +273,10 @@ export default function Home() {
                   </span>
                 </li>
               </ul>
-              <Button size="lg" className="rounded-full gap-2 h-12 px-8 text-sm font-semibold w-fit">
+              <Button
+                size="lg"
+                className="rounded-full gap-2 h-12 px-8 text-sm font-semibold w-fit"
+              >
                 Learn More
                 <ArrowRight className="h-5 w-5" />
               </Button>
@@ -256,7 +286,9 @@ export default function Home() {
                 <div className="w-full h-full rounded-3xl flex items-center justify-center text-muted-foreground">
                   <span className="text-center">
                     <Users className="h-28 w-28 mx-auto mb-4 opacity-40" />
-                    <p className="text-sm font-semibold">Collaboration in action</p>
+                    <p className="text-sm font-semibold">
+                      Collaboration in action
+                    </p>
                   </span>
                 </div>
               </div>
@@ -273,15 +305,23 @@ export default function Home() {
               Ready to start sketching?
             </h2>
             <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-7 font-medium">
-              Join thousands of creative teams using DrawBoard to bring their ideas to life.
+              Join thousands of creative teams using DrawBoard to bring their
+              ideas to life.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="rounded-full gap-2 h-12 px-8 text-sm font-semibold">
+            <Button
+              size="lg"
+              className="rounded-full gap-2 h-12 px-8 text-sm font-semibold"
+            >
               Start Drawing Free
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full h-12 px-8 text-sm font-semibold bg-transparent">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full h-12 px-8 text-sm font-semibold bg-transparent"
+            >
               Schedule Demo
             </Button>
           </div>
@@ -307,80 +347,124 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground text-sm">Product</h4>
+              <h4 className="font-semibold mb-4 text-foreground text-sm">
+                Product
+              </h4>
               <ul className="space-y-3 text-xs text-muted-foreground font-medium">
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Security
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground text-sm">Company</h4>
+              <h4 className="font-semibold mb-4 text-foreground text-sm">
+                Company
+              </h4>
               <ul className="space-y-3 text-xs text-muted-foreground font-medium">
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Blog
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Careers
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground text-sm">Legal</h4>
+              <h4 className="font-semibold mb-4 text-foreground text-sm">
+                Legal
+              </h4>
               <ul className="space-y-3 text-xs text-muted-foreground font-medium">
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Privacy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Terms
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Contact
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-foreground text-sm">Follow</h4>
+              <h4 className="font-semibold mb-4 text-foreground text-sm">
+                Follow
+              </h4>
               <ul className="space-y-3 text-xs text-muted-foreground font-medium">
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Twitter
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition duration-200">
+                  <a
+                    href="#"
+                    className="hover:text-primary transition duration-200"
+                  >
                     Discord
                   </a>
                 </li>
@@ -394,5 +478,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }

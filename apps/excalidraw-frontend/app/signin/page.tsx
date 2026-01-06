@@ -1,4 +1,4 @@
-import AuthPage from "@/components/AuthPage";
+import {AuthPage} from "@/components/AuthPage";
 import { Button } from "@repo/ui/button";
 import React from 'react'
 

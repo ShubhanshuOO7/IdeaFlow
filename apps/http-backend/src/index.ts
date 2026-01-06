@@ -4,9 +4,10 @@ import {signinSchema, signupSchema,createRoomSchema} from "@repo/common/types"
 import {prismaClient} from "@repo/db/client"
 import {JWT_SECRET} from "@repo/backend-common/config"
 import { middleware } from "./middleware";
+import cors from "cors"
 const app = express();
-app.use(express.json);
-
+app.use(express.json());
+app.use(cors());
 app.post("/signup",async(req,res)=>{
     try {
         
@@ -29,6 +30,7 @@ app.post("/signup",async(req,res)=>{
         })
         const token = jwt.sign({userId : user.id},JWT_SECRET)
         return res.status(200).json({
+            status: true,
             token : token,
             userId : user.id
         })
@@ -66,6 +68,7 @@ app.post("/signin",async(req,res)=>{
         }
         const token = jwt.sign({userId: user.id},JWT_SECRET)
         return res.status(200).json({
+            status : true,
             message: "Signin successfully",
             token
         })
@@ -76,21 +79,31 @@ app.post("/signin",async(req,res)=>{
 })
 
 app.post("/createRoom",middleware,async(req,res)=>{
-    const parsedData = createRoomSchema.safeParse(req.body);
-    if(!parsedData.success){
-        return res.status(400).json({
-            message: "Invalid inputs"
+    try {
+        
+        const parsedData = createRoomSchema.safeParse(req.body);
+        if(!parsedData.success){
+            return res.status(400).json({
+                message: "Invalid inputs"
+            })
+        }
+        //@ts-ignore
+        const userId = req.userId
+        
+        const room = await prismaClient.room.create({
+            data:{
+                slug : parsedData.data.slug,
+                adminId : userId
+            }
+        })
+        return res.status(200).json({
+            roomId: room.id
+        })
+    } catch (error) {
+        return res.json({
+            message: "User already exist with this name"
         })
     }
-    //@ts-ignore
-    const userId = req.userId
-    
-    const room = await prismaClient.room.create({
-        data:{
-            slug : parsedData.data.slug,
-            adminId : userId
-        }
-    })
     
 })
 
@@ -120,4 +133,8 @@ app.get("/rooms/:slug",async(req,res)=>{
     res.json({
         room
     })
+})
+
+app.listen(3001,()=>{
+    console.log("App is listening on 3001")
 })
