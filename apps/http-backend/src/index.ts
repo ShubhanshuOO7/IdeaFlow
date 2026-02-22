@@ -7,7 +7,10 @@ import { middleware } from "./middleware";
 import cors from "cors"
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
 app.post("/signup",async(req,res)=>{
     try {
         
@@ -15,27 +18,39 @@ app.post("/signup",async(req,res)=>{
         if(!parsedData.success){
             return res.status(400).json({message:"Incorrect inputs"})
         }
-        const {username,password,name} = parsedData.data;
-        if(!username || !password || !name){
+        const {email,password,name} = parsedData.data;
+        if(!email || !password || !name){
             return res.status(400).json({
                 message: "Missing required fields"
             })
         }
+        const existingUser = await prismaClient.user.findUnique({
+            where: {email}
+        })
+        if(existingUser){
+            return res.status(400).json({
+                message: "User already exist"
+            })
+        }
         const user = await prismaClient.user.create({
             data:{
-                email : username,
+                email : email,
                 name : name,
                 password : password
             }
         })
+        
         const token = jwt.sign({userId : user.id},JWT_SECRET)
         return res.status(200).json({
             status: true,
             token : token,
-            userId : user.id
+            userId : user.id,
+            user : user
         })
     } catch (error) {
-        console.log(error)
+        return res.status(500).json({
+        message: "Internal server error"
+    });
     }
 })
 
@@ -48,16 +63,16 @@ app.post("/signin",async(req,res)=>{
                 message : "Incorrect inputs"
             })
         }
-        const {username,password} = parsedData.data;
+        const {email,password} = parsedData.data;
     
-        if( !username || !password){
+        if( !email || !password){
             return res.status(400).json({
                 message: "Missing required fields"
             })
         }
         const user = await prismaClient.user.findFirst({
            where:{
-            email : username,
+            email : email,
             password : password
            }
         })
@@ -70,18 +85,22 @@ app.post("/signin",async(req,res)=>{
         return res.status(200).json({
             status : true,
             message: "Signin successfully",
-            token
+            token:token,
+            user: user
         })
     } catch (error) {
-        console.log(error)
+       return res.status(500).json({
+          message: "Internal server error"
+       })
     }
     
 })
 
 app.post("/createRoom",middleware,async(req,res)=>{
     try {
-        
+        console.log(req.body);
         const parsedData = createRoomSchema.safeParse(req.body);
+        console.log(req.body)
         if(!parsedData.success){
             return res.status(400).json({
                 message: "Invalid inputs"
@@ -133,6 +152,13 @@ app.get("/rooms/:slug",async(req,res)=>{
     res.json({
         room
     })
+})
+
+app.get("/logout",(req,res)=>{
+        return res.status(200).json({
+            status: true,
+            message: "User Logged out successfully"
+        })
 })
 
 app.listen(3001,()=>{

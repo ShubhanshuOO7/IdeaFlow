@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IconButton } from "./IconButton";
 import { Circle, FunnelX, Minus, Pencil, Plus, RectangleHorizontalIcon } from "lucide-react";
-import { Game } from "@/draw/Game";
+import { Game } from "../draw/Game";
 
 export type Tool = "circle" | "rect" | "pencil";
 
@@ -34,24 +34,25 @@ export function Canvas({
         }
 
 
-    }, [canvasRef]);
+    }, [canvasRef,percentage]);
 
-    function onZoom(){
-        setPercentage(10%100+percentage);
-    }
-    function inZoom(){
-        if(percentage<=0){
-            return;
-        }
-        setPercentage(percentage-10%100);
-    }
+    function onZoom() {
+    setPercentage(prev => Math.min(prev + 10, 200)); // max 200%
+}
+
+function inZoom() {
+    setPercentage(prev => Math.max(prev - 10, 10)); // min 10%
+}
 
 
     return <div style={{
         height: "100vh",
         overflow: "hidden"
     }}>
-        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}>
+        <canvas style={{
+            backgroundColor: "black",
+            background: "cover"
+        }} ref={canvasRef} width={window.innerWidth} height={window.innerHeight}>
             
         </canvas>
         <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
@@ -66,6 +67,11 @@ export function Canvas({
             <button className="text-white p-2 mx-1 hover:cursor-pointer">{percentage}%</button>
             <button className="text-white border-none p-2 rounded-r-xl hover:bg-gray-600 hover:cursor-pointer" onClick={inZoom}><Minus/></button>
             </div>
+        </div>
+        <div style={{
+            position: "fixed"
+        }}>
+            Creatong a chat icon
         </div>
 
     </div>

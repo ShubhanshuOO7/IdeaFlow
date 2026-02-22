@@ -1,4 +1,5 @@
-import { Tool } from "@/components/Canvas";
+import { Scale } from "lucide-react";
+import { Tool } from "../components/Canvas";
 import { getExistingShapes } from "./http";
 import { Jersey_10 } from "next/font/google";
 
@@ -89,7 +90,6 @@ export class Game {
      //   this.ctx.scale(1.25,1.25);
         this.ctx.fillStyle = "rgba(0, 0, 0)"
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.existingShapes.map((shape) => {
             if (shape.type === "rect") {
                 this.ctx.strokeStyle = "rgba(255, 255, 255)"

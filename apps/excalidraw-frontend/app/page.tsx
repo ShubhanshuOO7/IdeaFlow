@@ -1,55 +1,63 @@
+"use client"
 import { PenTool, Users, Zap, Share2, ArrowRight } from "lucide-react";
-import { Button } from "@repo/ui/button";
-import Link from "next/link";
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <PenTool className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-sm font-semibold tracking-tight">
-                IdeaFlow
-              </span>
-            </div>
-            <div className="hidden items-center gap-8 md:flex">
-              <a
-                href="#features"
-                className="text-xs font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                Features
-              </a>
-              <a
-                href="#showcase"
-                className="text-xs font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                Showcase
-              </a>
-              <a
-                href="#pricing"
-                className="text-xs font-medium text-muted-foreground hover:text-foreground transition"
-              >
-                Pricing
-              </a>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link href="/signin">
-                <Button size="md">Sign In</Button>
-              </Link>
-              <Link href="/signup">
-                <Button size="md">Sign Up</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+// import { Button } from "@repo/ui/src/com";
+import {Button} from "@repo/ui/components/ui/button"
+import {Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@repo/ui/components/ui/dialog"
+import {Label} from "@repo/ui/components/ui/label"
+import {Input} from "@repo/ui/components/ui/input"
+import { Spinner } from "@repo/ui/components/ui/spinner";
+import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { HTTP_BACKEND } from "../config";
+import { userState } from "../store/user";
 
+export default function Home() {
+  const router = useRouter();
+  const[slug,setSlug] = useState("")
+  const[loading,setLoading] = useState(false);
+  const[roomId,setRoomId] = useState("")
+  const token =userState((state)=>state.token)
+  const isLoggedIn = token ? true : false
+  const createRoom = async(res:any)=>{
+     try {
+      setLoading(true);
+      const res = await axios.post(`${HTTP_BACKEND}/createRoom`,{slug},{
+        headers:{
+          Authorization : localStorage.getItem("token")
+        }
+      })
+      if(res.data){
+        setLoading(false)
+        router.push(`/canvas/${res.data.roomId}`)
+      }
+     } catch (error) {
+        console.log(error);
+     }
+  }
+  const joinRoom = async()=>{
+    try {
+      setLoading(true)
+      const res = await axios.get(`${HTTP_BACKEND}/rooms/${slug}`,{
+        headers:{
+          Authorization: localStorage.getItem("token")
+        }
+      })
+      if(res.data){
+        setLoading(false);
+        router.push(`/canvas/${res.data.room.id}`);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  return (
+    <div className="min-h-screen ">
+      {/* Navigation */}
+      <Header user={isLoggedIn}/>
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-20 sm:py-32 md:py-48">
+      <section className="relative bg-blue-100  px-4 py-5 sm:py-32 md:py-12">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-12 md:grid-cols-2 md:gap-8 items-center">
             {/* Left Content */}
@@ -61,7 +69,7 @@ export default function Home() {
                   </p>
                 </div>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight text-balance">
-                  Think. <span className="text-primary">Sketch.</span>{" "}
+                  Think. <span className="text-blue-700">Sketch.</span>{" "}
                   <br className="hidden sm:block" />
                   <span className="text-primary">Collaborate.</span>
                 </h1>
@@ -71,84 +79,98 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className=" flex rounded-full gap-2 h-12 px-8 font-semibold text-sm justify-center items-center">
-                  <div>Start Drawing Free</div>
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-                <Button
-                  size="lg"
-                  className="rounded-full h-12 px-8 font-semibold text-sm"
-                >
-                  Watch Demo
-                </Button>
+                <Dialog>
+                    <DialogTrigger asChild>   
+                      <Button onClick={()=>{
+                        if(!isLoggedIn)router.push("/signin")
+                      }} size="lg" className=" flex rounded-full gap-2 h-12 px-8 font-semibold text-sm justify-center items-center">
+                        <div>Start Drawing Free</div>
+                        <ArrowRight className="h-5 w-5" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-xl h-xl">
+                      <DialogHeader>
+                          <DialogTitle>Create Room</DialogTitle>
+                          <DialogDescription>
+                            Before starting you need to create a room first
+                          </DialogDescription>
+                          <Label>Room Name</Label>
+                          <Input onChange={(e)=>{
+                            setSlug(e.target.value);
+                            //console.log(e.target.value)
+                          }} placeholder="xyz"></Input>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                               <Button variant={"outline"}>Cancel</Button>
+                            </DialogClose>
+                               <Button onClick={createRoom}>
+                                
+                                {loading ? <Spinner/> : "Save"}
+                                </Button>
+                          </DialogFooter>
+                      </DialogHeader>
+
+                    </DialogContent>
+                </Dialog>
+                <Dialog>
+                    <DialogTrigger asChild>   
+                      <Button size="lg" className=" flex rounded-full gap-2 h-12 px-8 font-semibold text-sm justify-center items-center">
+                        <div>Join a room</div>
+                        <ArrowRight className="h-5 w-5" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-xl h-xl">
+                      <DialogHeader>
+                          <DialogTitle>Join room</DialogTitle>
+                          <DialogDescription>
+                            Write the name of the room that you want to join
+                          </DialogDescription>
+                          <Label>Room Name</Label>
+                          <Input onChange={(e)=>{
+                            setSlug(e.target.value);
+                            //console.log(e.target.value)
+                          }} placeholder="xyz"></Input>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                               <Button variant={"outline"}>Cancel</Button>
+                            </DialogClose>
+                               <Button onClick={joinRoom}>Join</Button>
+                          </DialogFooter>
+                      </DialogHeader>
+
+                    </DialogContent>
+                </Dialog>
               </div>
               <p className="text-xs text-muted-foreground font-medium">
                 No credit card required. Free forever plan included.
               </p>
             </div>
-
+              {/*https://images.unsplash.com/photo-1588856122867-363b0aa7f598?q=80&w=773&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D */}
             {/* Right Visual */}
-            <div className="relative hidden md:block">
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary/15 to-accent/10 border-2 border-primary/20 flex items-center justify-center shadow-2xl">
-                <div className="space-y-6 p-8 w-full">
-                  <div className="h-40 rounded-2xl bg-gradient-to-br from-primary/30 to-accent/20 border-2 border-primary/30 flex items-center justify-center">
-                    <PenTool className="h-20 w-20 text-primary opacity-60" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="h-14 rounded-xl bg-primary/20 border-2 border-primary/30" />
-                    <div className="h-14 rounded-xl bg-primary/20 border-2 border-primary/30" />
-                    <div className="h-14 rounded-xl bg-primary/20 border-2 border-primary/30" />
-                    <div className="h-14 rounded-xl bg-primary/20 border-2 border-primary/30" />
-                  </div>
-                </div>
-              </div>
+            <div className="bg-cover w-full h-full rounded-sm border-2 border-white bg-[url('https://plus.unsplash.com/premium_photo-1720287601300-cf423c3d6760?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Indicators */}
-      <section className="border-b border-border px-4 py-16 bg-muted/30">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-10">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-              Trusted by teams worldwide
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center">
-            <div className="flex items-center justify-center opacity-50 hover:opacity-100 transition duration-300">
-              <div className="text-sm font-bold text-foreground">Figma</div>
-            </div>
-            <div className="flex items-center justify-center opacity-50 hover:opacity-100 transition duration-300">
-              <div className="text-sm font-bold text-foreground">Slack</div>
-            </div>
-            <div className="flex items-center justify-center opacity-50 hover:opacity-100 transition duration-300">
-              <div className="text-sm font-bold text-foreground">Notion</div>
-            </div>
-            <div className="flex items-center justify-center opacity-50 hover:opacity-100 transition duration-300">
-              <div className="text-sm font-bold text-foreground">Zapier</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Features Section */}
-      <section id="features" className="px-4 py-20 md:py-32">
+      <section id="features" className="px-4 py-20 md:py-32 bg-blue-100">
         <div className="mx-auto max-w-7xl">
           <div className="mb-20 text-center space-y-4">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-balance">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-blue-700">
               Powerful features for creative teams
             </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto font-medium leading-6">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium leading-6">
               Everything you need to sketch, design, and collaborate seamlessly
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <PenTool className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-600 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-600 flex items-center justify-center mb-6">
+                <PenTool className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Infinite Canvas
@@ -160,9 +182,9 @@ export default function Home() {
             </div>
 
             {/* Feature 2 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <Users className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-600 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-600 flex items-center justify-center mb-6">
+                <Users className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Real-Time Collaboration
@@ -174,9 +196,9 @@ export default function Home() {
             </div>
 
             {/* Feature 3 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <Zap className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-700 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-700 flex items-center justify-center mb-6">
+                <Zap className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Lightning Fast
@@ -188,9 +210,9 @@ export default function Home() {
             </div>
 
             {/* Feature 4 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <Share2 className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-700 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-600 flex items-center justify-center mb-6">
+                <Share2 className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Easy Sharing
@@ -202,9 +224,9 @@ export default function Home() {
             </div>
 
             {/* Feature 5 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <PenTool className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-700 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-700 flex items-center justify-center mb-6">
+                <PenTool className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Rich Drawing Tools
@@ -216,9 +238,9 @@ export default function Home() {
             </div>
 
             {/* Feature 6 */}
-            <div className="p-8 rounded-2xl border-2 border-border hover:border-primary/50 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
-              <div className="h-14 w-14 rounded-xl bg-primary/15 flex items-center justify-center mb-6">
-                <Zap className="h-7 w-7 text-primary" />
+            <div className="p-8 rounded-2xl border-2 border-border hover:border-blue-700 transition duration-300 bg-card hover:shadow-lg hover:shadow-primary/5">
+              <div className="h-14 w-14 rounded-xl bg-blue-700 flex items-center justify-center mb-6">
+                <Zap className="h-7 w-7 text-white" />
               </div>
               <h3 className="font-bold text-lg mb-3 text-foreground">
                 Version History
@@ -235,13 +257,13 @@ export default function Home() {
       {/* Showcase Section */}
       <section
         id="showcase"
-        className="px-4 py-20 md:py-32 bg-gradient-to-b from-muted/30 to-background"
+        className="px-4 py-20 md:py-32 bg-blue-100 from-muted/30 to-background"
       >
         <div className="mx-auto max-w-7xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-balance">
-                Collaboration Made Simple
+                <span className="text-blue-700">Collaboration</span> Made Simple
               </h2>
               <p className="text-base text-muted-foreground leading-7 font-medium">
                 Bring your entire team into the creative process. Chat, comment,
@@ -281,53 +303,9 @@ export default function Home() {
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
-            <div className="relative hidden md:block">
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary/20 to-accent/15 border-2 border-primary/25 flex items-center justify-center shadow-xl">
-                <div className="w-full h-full rounded-3xl flex items-center justify-center text-muted-foreground">
-                  <span className="text-center">
-                    <Users className="h-28 w-28 mx-auto mb-4 opacity-40" />
-                    <p className="text-sm font-semibold">
-                      Collaboration in action
-                    </p>
-                  </span>
-                </div>
-              </div>
-            </div>
+             <div className="bg-cover w-full h-full rounded-md  bg-[url('https://plus.unsplash.com/premium_photo-1677529496297-fd0174d65941?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
+             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="px-4 py-20 md:py-32">
-        <div className="mx-auto max-w-4xl text-center space-y-8">
-          <div className="space-y-4">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-balance">
-              Ready to start sketching?
-            </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-7 font-medium">
-              Join thousands of creative teams using DrawBoard to bring their
-              ideas to life.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="rounded-full gap-2 h-12 px-8 text-sm font-semibold"
-            >
-              Start Drawing Free
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full h-12 px-8 text-sm font-semibold bg-transparent"
-            >
-              Schedule Demo
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground font-medium">
-            Free forever. No credit card required. Upgrade anytime.
-          </p>
         </div>
       </section>
 
@@ -340,7 +318,7 @@ export default function Home() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                   <PenTool className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="font-bold text-sm">DrawBoard</span>
+                <span className="font-bold text-sm">IdeaFlow</span>
               </div>
               <p className="text-xs text-muted-foreground leading-6 font-medium">
                 The collaborative whiteboard for creative minds.
@@ -472,7 +450,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-muted-foreground font-medium">
-            <p>&copy; 2025 DrawBoard. All rights reserved.</p>
+            <p>&copy; 2025 IdeaFlow. All rights reserved.</p>
             <p>Made with care for creative teams</p>
           </div>
         </div>

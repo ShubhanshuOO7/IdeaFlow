@@ -8,15 +8,15 @@
     "dev": "npx tsc && node dist/index.js"
   },
   "devDependencies": {
-    "@repo/backend-common": "workspace:*",
-    "@repo/common": "workspace:*",
-    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
