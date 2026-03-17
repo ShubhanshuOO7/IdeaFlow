@@ -1,11 +1,16 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "generate":{
+       "cache":false,
+       "outputs":[]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**",".next/**", "!.next/cache/**", "prisma/generated/**"],
+      "env":["DATABASE_URL","JWT_SECRET"]
     },
     "lint": {
       "dependsOn": ["^lint"]
