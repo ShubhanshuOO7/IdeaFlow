@@ -21,7 +21,9 @@ import { toast } from "sonner";
 const Header = ({ user }: { user: boolean }) => {
   const setToken = userState((state)=>state.setToken)
   const logsOut = async()=>{
-    const res = await axios.get(`${HTTP_BACKEND}/logout`);
+    const res = await axios.get(`${HTTP_BACKEND}/logout`,{
+      withCredentials: true
+    });
     if(res.data.status){
       toast.success(res.data.message)
       setToken(null)
