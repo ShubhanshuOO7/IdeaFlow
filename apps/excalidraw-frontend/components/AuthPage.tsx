@@ -50,8 +50,8 @@ export function AuthPage() {
 
         router.push("/");
       }
-    } catch (error) {
-      toast.error("Something went wrong");
+    } catch (error:any) {
+      toast.error(error.response?.data?.message);
     } finally {
       setLoading(false);
     }
