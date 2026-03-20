@@ -8,7 +8,7 @@ import cors from "cors"
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000"," https://idea-flow-excalidraw-frontend-jepg.vercel.app/"],
+    origin: ["http://localhost:3000"," https://idea-flow-excalidraw-frontend-jepg.vercel.app"],
 }));
 app.post("/signup",async(req,res)=>{
     try {
