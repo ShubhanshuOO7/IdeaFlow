@@ -7,7 +7,12 @@ import { middleware } from "./middleware";
 import cors from "cors"
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    console.log("Incoming origin:", origin); 
+    callback(null, true);
+  }
+}));
 app.post("/signup",async(req,res)=>{
     try {
         
