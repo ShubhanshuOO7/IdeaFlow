@@ -51,7 +51,7 @@ export function AuthPage() {
         router.push("/");
       }
     } catch (error:any) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

@@ -7,9 +7,7 @@ import { middleware } from "./middleware";
 import cors from "cors"
 const app = express();
 app.use(express.json());
-app.use(cors({
-    origin: ["http://localhost:3000"," https://idea-flow-excalidraw-frontend-jepg.vercel.app"],
-}));
+app.use(cors());
 app.post("/signup",async(req,res)=>{
     try {
         
@@ -159,6 +157,7 @@ app.get("/logout",(req,res)=>{
             message: "User Logged out successfully"
         })
 })
+console.log("Cors loaded")
 
 app.listen(3001,()=>{
     console.log("App is listening on 3001")
