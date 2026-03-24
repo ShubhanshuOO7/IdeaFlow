@@ -4,12 +4,12 @@ import { WS_URL } from "../config";
 import { initDraw } from "../draw";
 import { useEffect, useRef, useState } from "react";
 import { Canvas } from "./Canvas";
+import { userState } from "../store/user";
 
 export function RoomCanvas({roomId}: {roomId: string}) {
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    
+     const token =userState((state)=>state.token)
     useEffect(() => {
-        const token = localStorage.getItem("token")
         const ws = new WebSocket(`${WS_URL}?token=${token}`)
         ws.onopen = () => {
             setSocket(ws);

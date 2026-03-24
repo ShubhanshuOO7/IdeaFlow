@@ -25,15 +25,16 @@ export default function Home() {
       setLoading(true);
       const res = await axios.post(`${HTTP_BACKEND}/createRoom`,{slug},{
         headers:{
-          Authorization : localStorage.getItem("token")
+          Authorization : `Bearer ${token}`
         }
       })
       if(res.data){
-        setLoading(false)
         router.push(`/canvas/${res.data.roomId}`)
       }
      } catch (error) {
         console.log(error);
+     }finally{
+      setLoading(false)
      }
   }
   const joinRoom = async()=>{
@@ -41,15 +42,16 @@ export default function Home() {
       setLoading(true)
       const res = await axios.get(`${HTTP_BACKEND}/rooms/${slug}`,{
         headers:{
-          Authorization: localStorage.getItem("token")
+          Authorization: `Bearer ${token}`
         }
       })
       if(res.data){
-        setLoading(false);
         router.push(`/canvas/${res.data.room.id}`);
       }
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false)
     }
   }
   return (
