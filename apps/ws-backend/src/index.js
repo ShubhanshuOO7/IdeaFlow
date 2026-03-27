@@ -92,7 +92,7 @@ wss.on("connection", (ws, request) => {
             }
         }
         catch (error) {
-            console.log(`Error aaya hain${error}`);
+            console.log(error);
         }
     });
 });

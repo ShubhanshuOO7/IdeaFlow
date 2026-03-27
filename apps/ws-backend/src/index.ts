@@ -63,11 +63,9 @@ wss.on("connection", (ws, request) => {
       parsedData = JSON.parse(data as unknown as string);
 
       if (parsedData.type === "join_room") {
-        console.log(parsedData.roomId);
+        
         const user = users.find((x) => x.ws === ws);
         user?.rooms.push(parsedData.roomId);
-        console.log(user);
-        console.log("user joined");
       }
       if (parsedData.type === "leave_room") {
         const user = users.find((x) => x.ws === ws);
@@ -83,7 +81,6 @@ wss.on("connection", (ws, request) => {
         }
         const roomId = user?.rooms[0];
         if (!roomId) {
-          // console.log("No room joined")
           return;
         }
         const message = parsedData.message;

@@ -99,7 +99,7 @@ export default function Home() {
                           <Label>Room Name</Label>
                           <Input onChange={(e)=>{
                             setSlug(e.target.value);
-                            //console.log(e.target.value)
+                            
                           }} placeholder="xyz"></Input>
                           <DialogFooter>
                             <DialogClose asChild>
@@ -130,7 +130,7 @@ export default function Home() {
                           <Label>Room Name</Label>
                           <Input onChange={(e)=>{
                             setSlug(e.target.value);
-                            //console.log(e.target.value)
+                            
                           }} placeholder="xyz"></Input>
                           <DialogFooter>
                             <DialogClose asChild>

@@ -97,9 +97,7 @@ app.post("/signin",async(req,res)=>{
 
 app.post("/createRoom",middleware,async(req,res)=>{
     try {
-        console.log(req.body);
         const parsedData = createRoomSchema.safeParse(req.body);
-        console.log(req.body)
         if(!parsedData.success){
             return res.status(400).json({
                 message: "Invalid inputs"
@@ -159,7 +157,7 @@ app.get("/logout",(req,res)=>{
             message: "User Logged out successfully"
         })
 })
-console.log("Cors loaded")
+
 
 app.listen(3001,()=>{
     console.log("App is listening on 3001")
