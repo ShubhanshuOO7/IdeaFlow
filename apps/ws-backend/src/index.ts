@@ -2,8 +2,15 @@ import WebSocket, { WebSocketServer } from "ws";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import { prismaClient } from "@repo/db/client";
-const wss = new WebSocketServer({ port: 8080 });
+import { createServer } from "http";
+const httpServer = createServer();
+const wss = new WebSocketServer({server:httpServer});
 
+const PORT = process.env.PORT || 8080;   
+
+httpServer.listen(PORT, () => {
+  console.log(`WebSocket server running on port ${PORT}`);
+});
 const checkUser = (token: string) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
